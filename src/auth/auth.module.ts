@@ -6,6 +6,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { authConstants } from "./auth.constants";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./jwt.strategy";
+import { ArtistsModule } from "../artists/artists.module";
 
 @Module({
   controllers: [AuthController],
@@ -13,6 +14,7 @@ import { JwtStrategy } from "./jwt.strategy";
   imports: [
     UsersModule,
     PassportModule,
+    ArtistsModule,
     JwtModule.register({
       secret: authConstants.secret,
       signOptions: {
