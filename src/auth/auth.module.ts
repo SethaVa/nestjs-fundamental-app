@@ -7,10 +7,11 @@ import { authConstants } from "./auth.constants";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./jwt.strategy";
 import { ArtistsModule } from "../artists/artists.module";
+import { ApiKeyStrategy } from "./ApiKeyStrategy";
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, ApiKeyStrategy],
   imports: [
     UsersModule,
     PassportModule,

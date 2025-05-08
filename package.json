@@ -34,12 +34,15 @@
     "class-validator": "^0.14.1",
     "nestjs-typeorm-paginate": "^4.1.0",
     "passport": "^0.7.0",
+    "passport-headerapikey": "^1.2.2",
+    "passport-http-bearer": "^1.0.1",
     "passport-jwt": "^4.0.1",
     "pg": "^8.15.6",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "speakeasy": "^2.0.0",
-    "typeorm": "^0.3.22"
+    "typeorm": "^0.3.22",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@darraghor/eslint-plugin-nestjs-typed": "^6.4.9",
@@ -53,6 +56,8 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.15.2",
+    "@types/passport": "^1.0.17",
+    "@types/passport-http": "^0.3.11",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.31.0",

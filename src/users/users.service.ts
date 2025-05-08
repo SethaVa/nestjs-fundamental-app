@@ -8,6 +8,7 @@ import { User } from "./user.entity";
 import { Repository, UpdateResult } from "typeorm";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import * as bcrypt from "bcryptjs";
+import { v4 as uuid4 } from "uuid";
 
 @Injectable()
 export class UsersService {
@@ -18,8 +19,15 @@ export class UsersService {
   async create(userDTO: CreateUserDTO): Promise<Partial<User>> {
     const SALT_ROUNDS = 10;
     userDTO.password = await bcrypt.hash(userDTO.password, SALT_ROUNDS);
-    const user = await this.userRepository.save(userDTO);
-    const { password, ...sanitizedUser } = user;
+
+    const user = new User();
+    user.firstName = userDTO.firstName;
+    user.lastName = userDTO.lastName;
+    user.email = userDTO.email;
+    user.apiKey = uuid4();
+    user.password = userDTO.password;
+    const savedUser = await this.userRepository.save(user);
+    const { password, ...sanitizedUser } = savedUser;
     return sanitizedUser;
   }
   async findOne(data: Partial<User>): Promise<User> {
@@ -53,5 +61,8 @@ export class UsersService {
         twoFASecret: "",
       },
     );
+  }
+  async findByApiKey(apiKey: string): Promise<User | null> {
+    return this.userRepository.findOneBy({ apiKey });
   }
 }

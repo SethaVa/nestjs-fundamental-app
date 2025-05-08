@@ -8,6 +8,7 @@ import { PayloadType } from "../types/payload.type";
 import * as speakeasy from "speakeasy";
 import { Enable2FAType } from "../types/auth-types";
 import { UpdateResult } from "typeorm";
+import { User } from "../users/user.entity";
 
 @Injectable()
 export class AuthService {
@@ -87,5 +88,8 @@ export class AuthService {
     } catch (err) {
       throw new UnauthorizedException("Error verifying token");
     }
+  }
+  async validateUserByApiKey(apiKey: string): Promise<User | null> {
+    return this.userService.findByApiKey(apiKey);
   }
 }

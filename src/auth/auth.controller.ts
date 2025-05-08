@@ -9,10 +9,12 @@ import { Request } from "express";
 import { Enable2FAType } from "../types/auth-types";
 import { UpdateResult } from "typeorm";
 import { ValidateTokenDTO } from "./dto/validate-token.dto";
+import { AuthGuard } from "@nestjs/passport";
 export interface RequestWithUser extends Request {
   user: {
     userId: number;
     email: string;
+    password?: string;
     // Add more fields if your JWT payload contains them
   };
 }
@@ -59,5 +61,14 @@ export class AuthController {
       req.user.userId,
       validateTokenDTO.token,
     );
+  }
+  @Get("profile")
+  @UseGuards(AuthGuard("bearer"))
+  getProfile(@Req() req: RequestWithUser) {
+    delete req.user.password;
+    return {
+      msg: "authenticated with api key",
+      user: req.user,
+    };
   }
 }
