@@ -3,9 +3,9 @@ import { DevConfigService } from './common/providers/DevConfigService';
 
 @Injectable()
 export class AppService {
-  constructor(private devConfigService: DevConfigService) {}
+    constructor(private devConfigService: DevConfigService) {}
 
-  getHello(): string {
-    return `Hello I am learning Nest.js Fundamentals ${this.devConfigService.getDBHOST()}`;
-  }
+    getHello(): string {
+        return `Hello I am learning Nest.js Fundamentals ${this.devConfigService.getDBHOST()}`;
+    }
 }

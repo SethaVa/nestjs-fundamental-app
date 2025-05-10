@@ -1,3 +1,3 @@
 export type Enable2FAType = {
-  secret: string;
+    secret: string;
 };
