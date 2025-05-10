@@ -6,34 +6,33 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SongsController } from './songs/songs.controller';
 import { DevConfigService } from './common/providers/DevConfigService';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Song } from './songs/song.entity';
-import { Artist } from './artists/artists.entity';
-import { User } from './users/user.entity';
 import { PlaylistsModule } from './playlists/playlists.module';
-import { Playlist } from './playlists/playlists.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
 import { DataSource } from 'typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AppConfig, DatabaseConfig } from './config';
 
 @Module({
     imports: [
         SongsModule,
         PlaylistsModule,
-        TypeOrmModule.forRoot({
-            type: 'postgres',
-            host: 'localhost',
-            port: 5432,
-            username: 'postgres',
-            password: '11111',
-            database: 'test-app',
-            entities: [Song, Artist, User, Playlist],
-            synchronize: true,
-            logging: true,
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            useFactory: async (configServices: ConfigService) => ({
+                ...(await configServices.get('database')),
+            }),
+            inject: [ConfigService],
         }),
         AuthModule,
         UsersModule,
         ArtistsModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            cache: true,
+            load: [AppConfig, DatabaseConfig],
+        }),
     ],
     controllers: [AppController],
     providers: [

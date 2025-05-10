@@ -23,4 +23,6 @@ export class User {
     enable2FA: boolean;
     @Column()
     apiKey: string;
+    @Column()
+    phone: string;
 }
