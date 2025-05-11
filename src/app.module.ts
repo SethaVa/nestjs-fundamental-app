@@ -13,6 +13,7 @@ import { ArtistsModule } from './artists/artists.module';
 import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig, DatabaseConfig } from './config';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { AppConfig, DatabaseConfig } from './config';
             cache: true,
             load: [AppConfig, DatabaseConfig],
         }),
+        SeedModule,
     ],
     controllers: [AppController],
     providers: [
