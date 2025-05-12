@@ -9,6 +9,7 @@ import * as speakeasy from 'speakeasy';
 import { Enable2FAType } from '../types/auth-types';
 import { UpdateResult } from 'typeorm';
 import { User } from '../users/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
         private userService: UsersService,
         private jwtService: JwtService,
         private artistService: ArtistsService,
+        private configService: ConfigService,
     ) {}
     async login(
         loginDTO: LoginDTO,
@@ -86,10 +88,15 @@ export class AuthService {
                 return { verified: false };
             }
         } catch (err) {
-            throw new UnauthorizedException('Error verifying token');
+            throw new UnauthorizedException('Error verifying token: ', err);
         }
     }
     async validateUserByApiKey(apiKey: string): Promise<User | null> {
         return this.userService.findByApiKey(apiKey);
+    }
+    getEnvVariables() {
+        return {
+            port: this.configService.get<number>('NODE_ENV'),
+        };
     }
 }

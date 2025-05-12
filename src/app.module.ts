@@ -11,21 +11,17 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
 import { DataSource } from 'typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppConfig, DatabaseConfig } from './config';
+import { ConfigModule } from '@nestjs/config';
 import { SeedModule } from './seed/seed.module';
+import { validate } from '../.env.validation';
+import { AppConfig, DatabaseConfig } from './config';
+import { typeOrmAsyncConfig } from './config/typeorm.config';
 
 @Module({
     imports: [
         SongsModule,
         PlaylistsModule,
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: async (configServices: ConfigService) => ({
-                ...(await configServices.get('database')),
-            }),
-            inject: [ConfigService],
-        }),
+        TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
         AuthModule,
         UsersModule,
         ArtistsModule,
@@ -33,6 +29,9 @@ import { SeedModule } from './seed/seed.module';
             isGlobal: true,
             cache: true,
             load: [AppConfig, DatabaseConfig],
+            // create 2 env files, .development.env and .production.env
+            envFilePath: ['.env.development', '.env.production'],
+            validate: validate,
         }),
         SeedModule,
     ],
