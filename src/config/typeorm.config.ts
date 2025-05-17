@@ -3,6 +3,10 @@ import {
     TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from '../users/user.entity';
+import { Playlist } from '../playlists/playlists.entity';
+import { Artist } from '../artists/artists.entity';
+import { Song } from '../songs/song.entity';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
@@ -15,7 +19,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             username: configService.get<string>('POSTGRESQL_USERNAME'),
             database: configService.get<string>('POSTGRESQL_DATABASE'),
             password: configService.get<string>('POSTGRESQL_PASSWORD'),
-            entities: ['dist/**/*.entity.js'],
+            entities: [User, Playlist, Artist, Song],
             synchronize: false,
             migrations: ['dist/db/migrations/*.js'],
         };

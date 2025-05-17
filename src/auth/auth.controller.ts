@@ -10,6 +10,7 @@ import { Enable2FAType } from '../types/auth-types';
 import { UpdateResult } from 'typeorm';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export interface RequestWithUser extends Request {
     user: {
         userId: number;
@@ -19,25 +20,39 @@ export interface RequestWithUser extends Request {
     };
 }
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
     constructor(
         private userService: UsersService,
         private authService: AuthService,
     ) {}
+
     @Post('signup')
+    @ApiOperation({ summary: 'Register new user' })
+    @ApiResponse({
+        status: 201,
+        description: 'It will return the user in the response',
+    })
     signup(
         @Body()
         userDTO: CreateUserDTO,
     ): Promise<Partial<User>> {
         return this.userService.create(userDTO);
     }
+
     @Post('login')
+    @ApiOperation({ summary: 'Login user' })
+    @ApiResponse({
+        status: 200,
+        description: 'It will give you the access_token in the response',
+    })
     login(
         @Body()
         loginDTO: LoginDTO,
     ) {
         return this.authService.login(loginDTO);
     }
+
     @Post('enable-2fa')
     @UseGuards(JwtAuthGuard)
     enable2FA(
@@ -46,11 +61,13 @@ export class AuthController {
     ): Promise<Enable2FAType> {
         return this.authService.enable2FA(req.user.userId);
     }
+
     @Get('disable-2fa')
     @UseGuards(JwtAuthGuard)
     disable2FA(@Req() req: RequestWithUser): Promise<UpdateResult> {
         return this.authService.disable2FA(req.user.userId);
     }
+
     @Post('validate-2fa')
     @UseGuards(JwtAuthGuard)
     validate2FA(
@@ -62,6 +79,7 @@ export class AuthController {
             validateTokenDTO.token,
         );
     }
+
     @Get('profile')
     @UseGuards(AuthGuard('bearer'))
     getProfile(@Req() req: RequestWithUser) {
@@ -71,6 +89,7 @@ export class AuthController {
             user: req.user,
         };
     }
+
     @Get('test')
     testEnv() {
         return this.authService.getEnvVariables();
