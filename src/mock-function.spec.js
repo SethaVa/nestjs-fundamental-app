@@ -47,3 +47,27 @@ describe('Mock Function Examples', () => {
         expect(mockFetchSongs()).resolves.toBe({ id: 1, title: 'Dancing Feat'});
     })
 });
+
+const songRepository = {
+    create: (createSongDto) => {
+        // Original method implement
+    },
+}
+
+describe('SpyOn Demo', () => {
+    it('should spyon the existing object', () => {
+        const spy = jest.spyOn(songRepository, 'create');
+
+        // call method
+        songRepository.create({ id: 1, title: 'Lover' });
+
+        // Assertions
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith({ id: 1, title: 'Lover' });
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        // Restore the original method
+        spy.mockRestore();
+    })
+})
