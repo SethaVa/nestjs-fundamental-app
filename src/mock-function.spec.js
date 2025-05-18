@@ -54,6 +54,12 @@ const songRepository = {
     },
 }
 
+class ArtistRepository {
+    save(createArtistDto) {
+        // Original method implementation
+    }
+}
+
 describe('SpyOn Demo', () => {
     it('should spyon the existing object', () => {
         const spy = jest.spyOn(songRepository, 'create');
@@ -66,6 +72,23 @@ describe('SpyOn Demo', () => {
         expect(spy).toHaveBeenCalledWith({ id: 1, title: 'Lover' });
         expect(spy).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledTimes(1);
+
+        // Restore the original method
+        spy.mockRestore();
+    })
+    it('should spy on the class method', () => {
+        const artist = new ArtistRepository();
+        const spy = jest
+            .spyOn(artist, "save")
+            .mockImplementation((createArtistDTO) => createArtistDTO)
+
+        // Call the method
+        artist.save({ name: "Martin Garrix"}) // 1
+        console.log(spy({ name: "Martin Garrix"}));
+
+        // Assertions
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith({ name: "Martin Garrix" });
 
         // Restore the original method
         spy.mockRestore();
