@@ -22,4 +22,28 @@ describe('Mock Function Examples', () => {
         expect(createSongMock).toHaveBeenCalled();
         expect(createSongMock({ title: 'Lover' })).toEqual({ id: 1, title: 'Lover' });
     });
+
+    it('create mock function using mockImplementation', () => {
+        const mockFn = jest.fn();
+        mockFn.mockImplementation(() => {
+            console.log('Mock function called');
+        });
+
+        mockFn();
+        expect(mockFn).toHaveBeenCalled();
+        expect(mockFn).toHaveBeenCalledTimes(1);
+        expect(mockFn).toHaveBeenCalledWith();
+    })
+
+    it('create mock function with promise', () => {
+        const mockFetchSongs = jest.fn();
+        mockFetchSongs.mockResolvedValue({ id: 1, title: 'Dancing Feat'});
+
+        mockFetchSongs().then((result) => {
+            console.log(result);
+        });
+
+        expect(mockFetchSongs).toHaveBeenCalled();
+        expect(mockFetchSongs()).resolves.toBe({ id: 1, title: 'Dancing Feat'});
+    })
 });
