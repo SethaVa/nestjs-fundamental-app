@@ -12,4 +12,14 @@ describe('Mock Function Examples', () => {
         expect(mockFn.mock.calls.length).toBe(2);
         expect(mockFn).toHaveBeenCalledWith(mockFn);
     });
+
+    it('should create a mock function with argument', () => {
+        const createSongMock = jest.fn((createSongDto) => ({
+            it: 1,
+            title: createSongDto.title,
+        }));
+        console.log(createSongMock);
+        expect(createSongMock).toHaveBeenCalled();
+        expect(createSongMock({ title: 'Lover' })).toEqual({ id: 1, title: 'Lover' });
+    });
 });
